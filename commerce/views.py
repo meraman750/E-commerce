@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm, LoginForm, AddProductForm
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Product, CustomUser
+from .models import Product, CustomUser, Cart, CartItem, Order, OrderItem
 from django.db import IntegrityError
 
 
@@ -74,7 +74,7 @@ class Dashboard(View):
             products = Product.objects.filter(name__icontains=query)
         else:
             products = Product.objects.all()
-            
+
         return render(request, "home.html", {
             "products": products
         })
@@ -119,7 +119,26 @@ class DeleteProduct(LoginRequiredMixin, View):
         messages.success(request, f"{product.name} has been deleted successfully!")
         return redirect("dashboard")
 
+class AddToCart(LoginRequiredMixin, View):
+    def post(self, request, product_id):
+        product = get_object_or_404(Product, id=product_id)
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart, 
+            product=product
+        )
 
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return redirect("dashboard")
+    
+class ViewCart(LoginRequiredMixin, View):
+    def get(self, request):
+        carts = Cart.objects.filter(user=request.user)
+        cart_list = CartItem.objects.filter(cart__in=carts)
+        return render(request, "cart.html", {"cart_list": cart_list})
 
 
 

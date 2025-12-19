@@ -14,7 +14,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     category = models.CharField(max_length=100)
-    stock_quantity = models.IntegerField(default=1)
+    stock_quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -45,7 +45,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="order_items_product")
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
@@ -53,7 +53,6 @@ class OrderItem(models.Model):
     
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart")
-    products = models.ManyToManyField(Product, related_name="cart_products")
 
     def __str__(self):
         return f"Cart #{self.id} - {self.user.username}"
@@ -63,7 +62,7 @@ class Cart(models.Model):
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="cart_items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="cart_items_product")
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"cart | #{self.product.name} x {self.quantity}"

@@ -13,6 +13,9 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class AddProductForm(forms.ModelForm):
+    price = forms.DecimalField(min_value=0.01, max_digits=10, decimal_places=2)
+    stock_quantity = forms.IntegerField(min_value=1)
+
     class Meta:
         model = Product
         fields = ["name", "description", "price", "category", "stock_quantity"]
