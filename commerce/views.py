@@ -68,7 +68,13 @@ class UserDetail(LoginRequiredMixin, View):
 
 class Dashboard(View):
     def get(self, request):
-        products = Product.objects.all()
+        query = request.GET.get("q")
+
+        if query:
+            products = Product.objects.filter(name__icontains=query)
+        else:
+            products = Product.objects.all()
+            
         return render(request, "home.html", {
             "products": products
         })
