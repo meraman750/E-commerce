@@ -1,17 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from .forms import RegisterForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
+from .forms import RegisterForm, LoginForm, AddProductForm
 from django.views import View
-import requests
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Product, CustomUser
+from django.db import IntegrityError
 
-TOKEN_URL = "http://127.0.0.1:8000/api/token/"
 
 class Regsiter(View):
-    permission_classes = [AllowAny]
-
     def get(self, request):
         form = RegisterForm()
         return render(request, "register.html", {"form": form})
@@ -22,21 +19,24 @@ class Regsiter(View):
         if form.is_valid():
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
+            phone_number = form.cleaned_data["phone_number"]
             password = form.cleaned_data["password"]
-            User.objects.create_user(
-                username=username, 
-                email=email,
-                password=password
-            )
 
-            messages.success(request, "Registration successful! please login.")
-            return redirect("login")
+            try:
+                CustomUser.objects.create_user(
+                    username=username, 
+                    email=email,
+                    phone_number=phone_number,
+                    password=password
+                )
+                return redirect("dashboard")
+            except IntegrityError:
+                messages.error(request, "Username, email, or phone number already exists!")
+                return render(request, "register.html", {"form": form})
 
         return render(request, "register.html", {"form": form})    
     
-
 class Login(View):
-
     def get(self, request):
         form = LoginForm()
         return render(request, "login.html", {"form": form})
@@ -47,44 +47,76 @@ class Login(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            response = requests.post(TOKEN_URL, data={
-                "username": username,
-                "password": password
-            })
-
-            if response.status_code == 200:
-                tokens = response.json()
-                request.session['access'] = tokens['access']
-                request.session['refresh'] = tokens['refresh']
-                request.session['user'] = username
-
-                messages.success(request, f"Welcome back {username}!")
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
                 return redirect("dashboard")
-            else:
-                messages.error(request, "Invalid username or password!")
     
-        return render(request, "login.html", {"form": form})
-    
+        return render(request, "login.html", {"form": form})   
 
 class Logout(View):
-
     def get(self, request):
-        request.session.flush()
+        logout(request)
         messages.success(request, "You have been logged out!")
         return redirect("login")
     
+class UserDetail(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def get(self, request):
+        return render(request, "user_detail.html", {"user":request.user})    
 
 class Dashboard(View):
     def get(self, request):
-        access = request.session.get("access")
-
-        if not access:
-            messages.error(request, "Please login first")
-            return redirect("login")
-        
+        products = Product.objects.all()
         return render(request, "home.html", {
-            "user": request.session.get("user")
+            "products": products
         })
+    
+class AddProduct(LoginRequiredMixin, View):
+    def get(self, request):
+        form = AddProductForm()
+        return render(request, "add_product.html", {"form": form})
+
+    def post(self, request):
+        form = AddProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            messages.success(request, f"{product.name} added successfully!")
+
+            return redirect("dashboard")
+        return render(request, "add_product.html", {"form": form})
+    
+class UpdateProduct(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk, user=request.user)
+        form = AddProductForm(instance=product)
+        return render(request, "edit_product.html", {"form": form, "product": product})
+    
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk, user=request.user)
+        form = AddProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{product.name} updated successfully!")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Please correct the errors below.")
+        return render(request, "edit_product.html", {"form": form, "product": product})
+
+class DeleteProduct(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk, user=request.user)
+        product.delete()
+        messages.success(request, f"{product.name} has been deleted successfully!")
+        return redirect("dashboard")
+
+
+
+
+
 
 
 
