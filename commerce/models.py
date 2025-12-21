@@ -21,6 +21,23 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name} | {self.category}"
     
+class Cart(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart")
+
+    def __str__(self):
+        return f"Cart #{self.id} - {self.user.username}"
+    
+# one row in the cart table
+# one row in cartitem = one product added to cart    
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="cart_items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="cart_items_product")
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"cart | #{self.product.name} x {self.quantity}"   
+     
 class Order(models.Model):
     STATUS_OPTIONS = [
         ("pending","Pending"),
@@ -31,7 +48,6 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
-    products = models.ManyToManyField(Product, related_name="orders")
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     status = models.CharField(max_length=20, choices=STATUS_OPTIONS, default="pending")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,20 +67,6 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"order | #{self.product.name} x {self.quantity}"
     
-class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart")
 
-    def __str__(self):
-        return f"Cart #{self.id} - {self.user.username}"
-    
-# one row in the cart table
-# one row in cartitem = one product added to cart    
-class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="cart_items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="cart_items_product")
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"cart | #{self.product.name} x {self.quantity}"
 
     

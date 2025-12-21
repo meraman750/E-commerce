@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Update Cart</h2>
+
+    <form action="" method="post">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Remove</th>
+        </tr>
+        {% for item in cart_list %}
+        <tr>
+          <td>{{ item.product.name }}</td>
+          <td>
+            <input
+              type="number"
+              name="quantity_{{ item.id }}"
+              value="{{ item.quantity }}"
+              min="1"
+            />
+          </td>
+          <td>
+            <button
+              type="submit"
+              name="action"
+              value="remove_{{ item.id }}"
+              style="color: red"
+            >
+              ❌
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <br />
+      <button type="submit" name="action" value="save">Save changes</button>
+    </form>
+  </body>
+</html>

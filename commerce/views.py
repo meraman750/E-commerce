@@ -136,10 +136,111 @@ class AddToCart(LoginRequiredMixin, View):
     
 class ViewCart(LoginRequiredMixin, View):
     def get(self, request):
-        carts = Cart.objects.filter(user=request.user)
-        cart_list = CartItem.objects.filter(cart__in=carts)
-        return render(request, "cart.html", {"cart_list": cart_list})
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+        
+        products = 0
+        total = 0
+            
+        for cart_item in cart_items:
+                total += cart_item.product.price * cart_item.quantity
+                products +=1
 
+        context = {
+                "cart": cart,
+                "items": products,
+                "total_price": total,
+            }
+
+        return render(request, "cart.html", context)
+
+class ViewCartItems(LoginRequiredMixin, View):
+    def get(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        for cart in cart_items:
+            total_price = cart.product.price * cart.quantity
+             
+            cart.price = total_price
+            cart.save()
+        return render(request, "cart_items.html", {"cart_items": cart_items})
+
+class UpdateCart(LoginRequiredMixin, View):
+    
+    def get(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart_list = CartItem.objects.filter(cart=cart)
+        return render(request, "update_cart.html", {"cart_list": cart_list})
+    
+    def post(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        action = request.POST.get("action")
+
+        if action and action.startswith("remove_"):
+            item_id = action.split("_")[1]
+            CartItem.objects.filter(id=item_id, cart=cart).delete()
+            return redirect("update_cart")
+        
+        if action == "save":
+            for item in cart_items:
+                qty = request.POST.get(f"quantity_{item.id}")
+
+                if qty:
+                    item.quantity = int(qty)
+                    item.save()
+            return redirect("view_cart")
+
+        return redirect("update_cart")
+
+class DeleteCart(LoginRequiredMixin, View):
+    def post(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart.delete()
+        return redirect("view_cart")
+
+class CreateOrder(LoginRequiredMixin, View):
+    def post(self, request):
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        if not cart_items.exists():
+            return redirect("view_cart")
+
+        order = Order.objects.create(
+            user=request.user,
+            total_price=0
+        )
+
+        total = 0
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.price
+            )
+            total += item.price
+            item.product.stock_quantity-=item.quantity
+            item.product.save()
+
+        order.total_price = total
+        order.save()
+
+        return redirect("order_list")
+    
+class ViewOrders(LoginRequiredMixin, View):
+    def get(self, request):
+        orders = Order.objects.filter(user=request.user)
+        return render(request, "order_list.html", {"orders": orders})
+
+class ViewOrderItems(LoginRequiredMixin, View):
+    pass
+
+class CancelOrder(LoginRequiredMixin, View):
+    pass
 
 
 

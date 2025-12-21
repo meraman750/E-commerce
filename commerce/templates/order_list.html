@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if orders %}
+        <p>Order name | Total Price | Status </p>
+        <a href="">
+            <div style="text-decoration: none; border: solid 2px; padding: 10px">
+                {% for order in orders %}
+                    Order-{{ order.id }} | {{ order.total_price }} | {{ order.status }} <br>
+                    Created at: {{ order.created_at |date:"Y-m-d H:i"  }}
+                    <form action="" method="post">
+                        <button type="submit">Cancel</button>
+                    </form>
+                {% endfor %}
+            </div>
+        </a>
+    {% else %}
+        <p>No order yet</p>
+    {% endif  %}
+</body>
+</html>

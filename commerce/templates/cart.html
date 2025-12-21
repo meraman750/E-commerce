@@ -3,17 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cart</title>
+    <title>Document</title>
   </head>
   <body>
     <h2>Cart</h2>
-    {% if cart_list %} 
-        <p>Product | quantity </p>
-        {% for item in cart_list %}
-            <p>{{ item.product.name }} * {{ item.quantity }}</p>
-        {% endfor %} 
+    <a href="{% url 'cart_items' %}">
+      <div style="text-decoration: none; border: solid 2px; padding: 10px">
+        <p>Cart-{{ cart.id }}</p>
+        <p>Total price: {{ total_price }}</p>
+        <p>Total items: {{ items }}</p>
+      </div>
+    </a>
+    <br />
+    {% if cart %}
+    <a href="{% url 'update_cart' %}">Update Cart</a>
+    <a href="{% url 'delete_cart' %}">Delete Cart</a>
+    <form action="{% url 'order' %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Buy</button>
+    </form>
     {% else %}
-        <p>Your cart is empty.</p>
+    <p>No cart yet.</p>
     {% endif %}
   </body>
 </html>
