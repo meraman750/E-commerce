@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/delete_confirm.css' %}">
+
+<div class="confirm-container">
+    <h2 class="confirm-title">Delete Product</h2>
+
+    <p class="confirm-text">
+        Are you sure you want to permanently delete
+        <strong>{{ product.name }}</strong>?
+    </p>
+
+    <div class="confirm-actions">
+        <!-- CONFIRM DELETE -->
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">
+                Yes, Delete
+            </button>
+        </form>
+
+        <!-- CANCEL -->
+        <a href="{% url 'dashboard' %}" class="btn-cancel">
+            Cancel
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,29 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h2>Cart</h2>
-    <a href="{% url 'cart_items' %}">
-      <div style="text-decoration: none; border: solid 2px; padding: 10px">
-        <p>Cart-{{ cart.id }}</p>
-        <p>Total price: {{ total_price }}</p>
-        <p>Total items: {{ items }}</p>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+
+<h2 class="cart-title">Your Cart</h2>
+
+{% if cart %}
+<div class="cart-layout">
+
+  <!-- LEFT: CART INFO -->
+  <div class="cart-left">
+    <a href="{% url 'cart_items' %}" class="cart-link">
+      <div class="cart-card">
+        <p class="cart-id">Cart #{{ cart.id }}</p>
+        <p class="cart-total">
+          Total Price: <span>{{ total_price }} birr</span>
+        </p>
+        <p class="cart-items">
+          Total Items: <span>{{ items }}</span>
+        </p>
       </div>
     </a>
-    <br />
-    {% if cart %}
-    <a href="{% url 'update_cart' %}">Update Cart</a>
-    <a href="{% url 'delete_cart' %}">Delete Cart</a>
-    <form action="{% url 'order' %}" method="post">
-      {% csrf_token %}
-      <button type="submit">Buy</button>
-    </form>
-    {% else %}
-    <p>No cart yet.</p>
-    {% endif %}
-  </body>
-</html>
+
+    <div class="cart-actions">
+      <a href="{% url 'update_cart' %}" class="btn btn-primary">
+        Update Cart
+      </a>
+
+      <a href="{% url 'delete_cart' %}" class="btn btn-danger">
+        Clear Cart
+      </a>
+
+      <form action="{% url 'order' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-dark">
+          Buy Now
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- RIGHT: CART IMAGE -->
+  <div class="cart-right">
+    <img
+      src="{% static 'images/cart.jpg' %}"
+      alt="Shopping Cart"
+      class="cart-image"
+    />
+  </div>
+
+</div>
+{% else %}
+<p class="empty-cart">No cart yet.</p>
+{% endif %}
+
+{% endblock %}

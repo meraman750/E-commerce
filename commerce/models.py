@@ -17,6 +17,7 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to="product_images/", blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} | {self.category}"

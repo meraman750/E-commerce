@@ -1,0 +1,83 @@
+/* PROFILE PAGE STYLING */
+
+/* CONTAINER */
+.profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* PAGE TITLE */
+.profile-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 30px;
+}
+
+/* PROFILE CARD */
+.profile-card {
+    text-align: left;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    line-height: 1.8;
+}
+
+.profile-card p {
+    font-size: 16px;
+    color: #333;
+}
+
+/* ACTION BUTTONS */
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1e4bb8;
+}
+
+.btn-danger {
+    background-color: #ff4d4f;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #d9363e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 20px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %} MuluStore {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <!-- LEFT -->
+      <div class="nav-left">
+        {% if user.is_staff %}
+        <span class="brand admin">ADMIN</span>
+        {% else %}
+        <span class="brand">MuluStore</span>
+        {% endif %}
+
+        <a href="{% url 'dashboard' %}" class="nav-link">Products</a>
+        <a href="{% url 'view_cart' %}" class="nav-link">Cart</a>
+        <a href="{% url 'order_list' %}" class="nav-link">Orders</a>
+
+        {% if user.is_staff %}
+        <a href="{% url 'add_product' %}" class="nav-link admin-link">
+          + Add Product
+        </a>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT -->
+      <div class="nav-right">
+        <a href="{% url 'profile' %}" class="user-link">
+          {% if user.is_authenticated %}
+          {{ user.username }}
+          {% else %}
+          <a href="{% url 'login' %}" class="user-link">Login</a>
+          {% endif %}
+        </a>
+      </div>
+    </nav>
+
+    <main class="content">{% block content %}{% endblock %}</main>
+  </body>
+</html>

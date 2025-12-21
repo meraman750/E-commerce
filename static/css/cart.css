@@ -1,0 +1,157 @@
+.cart-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #111;
+}
+
+/* CART LINK RESET */
+.cart-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* CART CARD */
+.cart-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    max-width: 520px;
+    max-height: 600px;
+    transition: all 0.25s ease;
+}
+
+.cart-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* CART TEXT */
+.cart-card p {
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cart-id {
+    font-weight: 700;
+}
+
+.cart-total span,
+.cart-items span {
+    color: #2563eb; /* primary blue */
+    font-weight: 600;
+}
+
+/* ACTION BUTTONS */
+.cart-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* BUTTON BASE */
+.btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* BUTTON VARIANTS */
+.btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1e4bb8;
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.btn-dark {
+    background-color: #111;
+    color: #fff;
+}
+
+.btn-dark:hover {
+    background-color: #2563eb;
+}
+
+/* EMPTY CART */
+.empty-cart {
+    font-size: 16px;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+    .cart-card {
+        max-width: 100%;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.cart-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+/* LEFT SIDE */
+.cart-left {
+    flex: 1;
+}
+
+/* RIGHT SIDE IMAGE */
+.cart-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.cart-image {
+    max-width: 220px;
+    width: 100%;
+    object-fit: contain;
+    opacity: 0.95;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .cart-layout {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cart-right {
+        margin-top: 20px;
+    }
+
+    .cart-image {
+        max-width: 220px;
+    }
+}

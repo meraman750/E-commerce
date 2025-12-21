@@ -1,19 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cart Items</title>
-  </head>
-  <body>
-    <h2>Cart Items</h2>
-    {% if cart_items %} 
-        <p>Product | Quantity | Price </p>
-        {% for item in cart_items %}
-            <p>{{ item.product.name }} * {{ item.quantity }} | {{ item.price }} </p>
-        {% endfor %} 
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
-  </body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cart Items{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart_items.css' %}">
+
+<h2 class="page-title">Cart Items</h2>
+
+{% if cart_items %}
+<div class="cart-items-table">
+    <div class="cart-items-header">
+        <span class="header-product">Product</span>
+        <span class="header-quantity">Quantity</span>
+        <span class="header-price">Price</span>
+    </div>
+
+    {% for item in cart_items %}
+    <div class="cart-item-row">
+        <span class="item-product">{{ item.product.name|title }}</span>
+        <span class="item-quantity">{{ item.quantity }}</span>
+        <span class="item-price">{{ item.price }} birr</span>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="empty-cart">Your cart is empty.</p>
+{% endif %}
+
+{% endblock %}

@@ -3,9 +3,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm, LoginForm, AddProductForm
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Product, CustomUser, Cart, CartItem, Order, OrderItem
 from django.db import IntegrityError
+from django.http import JsonResponse
 
 
 class Regsiter(View):
@@ -79,42 +80,68 @@ class Dashboard(View):
             "products": products
         })
     
-class AddProduct(LoginRequiredMixin, View):
+class AddProduct(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = "login"  # Redirect if not logged in
+
+    def test_func(self):
+        return self.request.user.is_staff  # Only staff users allowed
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You are not authorized to add products")
+        return redirect("dashboard")
+
     def get(self, request):
         form = AddProductForm()
         return render(request, "add_product.html", {"form": form})
 
     def post(self, request):
-        form = AddProductForm(request.POST)
+        form = AddProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.user = request.user
             product.save()
             messages.success(request, f"{product.name} added successfully!")
-
             return redirect("dashboard")
         return render(request, "add_product.html", {"form": form})
     
-class UpdateProduct(LoginRequiredMixin, View):
+class UpdateProduct(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def handle_no_permission(self):
+        messages.error(self.request, "You are not authorized to update products")
+        return redirect("dashboard")
+
     def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk, user=request.user)
+        product = get_object_or_404(Product, pk=pk)
         form = AddProductForm(instance=product)
         return render(request, "edit_product.html", {"form": form, "product": product})
     
     def post(self, request, pk):
-        product = get_object_or_404(Product, pk=pk, user=request.user)
-        form = AddProductForm(request.POST, instance=product)
+        product = get_object_or_404(Product, pk=pk)
+        form = AddProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
             messages.success(request, f"{product.name} updated successfully!")
             return redirect("dashboard")
-        else:
-            messages.error(request, "Please correct the errors below.")
+        
+        messages.error(request, "Please correct the errors below.")
         return render(request, "edit_product.html", {"form": form, "product": product})
 
-class DeleteProduct(LoginRequiredMixin, View):
+class DeleteProduct(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You are not authorized to delete products")
+        return redirect("dashboard")
+
     def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk, user=request.user)
+        product = get_object_or_404(Product, pk=pk)
+        return render(request, "delete_product_confirm.html", {"product": product})
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
         product.delete()
         messages.success(request, f"{product.name} has been deleted successfully!")
         return redirect("dashboard")
@@ -132,11 +159,20 @@ class AddToCart(LoginRequiredMixin, View):
             cart_item.quantity += 1
             cart_item.save()
 
+        # Check if AJAX request
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": True,
+                "product_name": product.name,
+                "quantity": cart_item.quantity
+            })
+
+        # Fallback for normal POST
         return redirect("dashboard")
     
 class ViewCart(LoginRequiredMixin, View):
     def get(self, request):
-        cart = Cart.objects.get(user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = CartItem.objects.filter(cart=cart)
         
         products = 0
@@ -196,10 +232,24 @@ class UpdateCart(LoginRequiredMixin, View):
         return redirect("update_cart")
 
 class DeleteCart(LoginRequiredMixin, View):
+
+    def get(self, request):
+        cart = Cart.objects.filter(user=request.user).first()
+
+        if not cart:
+            messages.info(request, "Your cart is already empty.")
+            return redirect("dashboard")
+
+        return render(request, "delete_cart_confirm.html", {"cart": cart})
+
     def post(self, request):
-        cart = Cart.objects.get(user=request.user)
-        cart.delete()
-        return redirect("view_cart")
+        cart = Cart.objects.filter(user=request.user).first()
+
+        if cart:
+            cart.delete()
+            messages.success(request, "Your cart has been cleared successfully.")
+
+        return redirect("dashboard")
 
 class CreateOrder(LoginRequiredMixin, View):
     def post(self, request):
@@ -237,15 +287,28 @@ class ViewOrders(LoginRequiredMixin, View):
         return render(request, "order_list.html", {"orders": orders})
 
 class ViewOrderItems(LoginRequiredMixin, View):
-    pass
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        order_items = OrderItem.objects.filter(order=order)
+        return render(request, "order_items.html", {"order_items": order_items, "order": order})
 
 class CancelOrder(LoginRequiredMixin, View):
-    pass
+    def post(self, request, order_id):
+        # First, redirect to confirmation page if not confirmed
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        return render(request, "cancel_order_confirm.html", {"order": order})
 
+class ConfirmCancelOrder(LoginRequiredMixin, View):
+    def post(self, request, order_id):
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+        action = request.POST.get("action")
 
-
-
-
-
+        if action == "confirm":
+            order.delete()
+            messages.success(request, f"Order #{order.id} has been canceled successfully.")
+        else:
+            messages.info(request, f"Order #{order.id} was not canceled.")
+        
+        return redirect("order_list")
 
 

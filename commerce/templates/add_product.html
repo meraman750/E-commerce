@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="" method="POST">
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/add_product.css' %}">
+
+<div class="form-container">
+    <h2 class="form-title">Post a New Product</h2>
+    <form method="POST" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Post product</button>
+        <button type="submit" class="btn-submit">Post Product</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

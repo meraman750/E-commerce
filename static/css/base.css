@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #111;
+}
+
+/* NAVBAR */
+.navbar {
+    position: fixed;       /* <-- makes it fixed on screen */
+    top: 0;                /* <-- stick to top */
+    left: 0;
+    width: 100%;           /* <-- full width */
+    height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 1000;         /* <-- stay on top of other content */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* optional subtle shadow */
+}
+
+/* LEFT */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* BRAND */
+.brand {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+}
+
+.brand.admin {
+    color: #2563eb;
+}
+
+/* LINKS */
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: #eaf0ff;
+    color: #2563eb;
+}
+
+/* ADMIN LINK */
+.admin-link {
+    font-weight: 600;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+}
+
+.admin-link:hover {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+/* RIGHT */
+.user-link {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 20px;
+}
+
+.user-link:hover {
+    background-color: #eaf0ff;
+}
+
+/* CONTENT */
+.content {
+    max-width: 1200px;
+    margin: auto;
+    padding: 100px 30px 30px; /* <-- top padding = navbar height + extra */
+}

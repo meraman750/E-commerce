@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cancel Order{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order.css' %}">
+
+<div class="confirm-container">
+    <h2>Cancel Order</h2>
+    <p>Are you sure you want to cancel Order #{{ order.id }}?</p>
+
+    <form method="post" action="{% url 'confirm_cancel_order' order.id %}">
+        {% csrf_token %}
+        <button type="submit" name="action" value="confirm" class="btn btn-danger">Yes, Cancel Order</button>
+        <button type="submit" name="action" value="abort" class="btn btn-secondary">No, Go Back</button>
+    </form>
+</div>
+{% endblock %}

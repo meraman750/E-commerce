@@ -1,18 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
+{% extends "base.html" %}
+{% load static %}
 
-    <form action="" method="POST">
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+<div class="register-container">
+    <h2 class="register-title">Create Account</h2>
+
+    <form method="POST" class="register-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 
-    <p>Already have an account ? <a href="{% url 'login' %}">Login</a></p>
-    
-</body>
-</html>
+    <p class="login-link">Already have an account? 
+        <a href="{% url 'login' %}">Login</a>
+    </p>
+</div>
+{% endblock %}

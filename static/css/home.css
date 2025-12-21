@@ -1,0 +1,216 @@
+/* Products Page Styling - Modern, consistent with navbar */
+
+/* PAGE TITLE */
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #111;
+}
+
+/* PRODUCTS GRID */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+/* PRODUCT CARD */
+.product-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* PRODUCT IMAGE */
+.product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.product-placeholder {
+    width: 150px;
+    height: 150px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+/* PRODUCT INFO */
+.product-info {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 4px;
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2563eb; /* primary blue */
+    margin-bottom: 4px;
+}
+
+.product-category {
+    font-size: 14px;
+    color: #555;
+}
+
+/* PRODUCT ACTIONS */
+.product-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* BUTTON STYLES */
+.btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-update {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.btn-update:hover {
+    background-color: #1e4bb8;
+}
+
+.btn-delete {
+    background-color: #ff4d4f;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #d9363e;
+}
+
+.btn-cart {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.btn-cart:hover {
+    background-color: #1e4bb8;
+}
+
+/* INLINE FORM */
+.inline-form {
+    display: inline-block;
+}
+
+/* NO PRODUCTS */
+.no-products {
+    color: #555;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* RESPONSIVE GRID ON MOBILE */
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .product-image, .product-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Toast notification for Add to Cart */
+.toast-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #2563eb; /* primary blue */
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Toast notification */
+.toast-notification {
+    position: fixed;
+    top: 20px;        /* show at top instead of bottom */
+    right: 20px;
+    background-color: #2563eb; /* primary blue */
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #2563eb;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
