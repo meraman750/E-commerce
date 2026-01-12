@@ -1,4 +1,3 @@
-```markdown
 # 🛒 E-commerce Product API
 
 [![Python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
@@ -14,8 +13,8 @@ The **E-commerce Product API** is a RESTful backend service built with **Django*
 
 It provides:
 
-- Full **CRUD functionality**
-- **Search and filtering**
+- Full **CRUD functionality** for users and products
+- **Search and filtering** for products
 - **Basic authentication** for secure access  
 
 This API is designed to be easily integrated with web or mobile frontend applications.
@@ -69,22 +68,24 @@ This API is designed to be easily integrated with web or mobile frontend applica
 
 ## 📁 Project Structure
 
-```
-
+```text
 ecommerce_product_api/
 │
 ├── ecommerce_api/
+│   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
 │
 ├── users/
+│   ├── __init__.py
 │   ├── models.py
 │   ├── serializers.py
 │   ├── views.py
 │   └── urls.py
 │
 ├── products/
+│   ├── __init__.py
 │   ├── models.py
 │   ├── serializers.py
 │   ├── views.py
@@ -95,156 +96,124 @@ ecommerce_product_api/
 ├── static/
 ├── manage.py
 └── requirements.txt
-
-````
-
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the Repository
-
-```bash
+⚙️ Installation & Setup
+1️⃣ Clone the Repository
+bash
+Copy code
 git clone https://github.com/meraman750/E-commerce.git
-cd ecommerce-product-api
-````
-
-### 2️⃣ Create a Virtual Environment
-
-```bash
+cd E-commerce
+2️⃣ Create a Virtual Environment
+bash
+Copy code
 python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-```
-
-### 3️⃣ Install Dependencies
-
-```bash
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+3️⃣ Install Dependencies
+bash
+Copy code
 pip install -r requirements.txt
-```
+4️⃣ Configure Environment Variables
+Create a .env file and add:
 
-### 4️⃣ Configure Environment Variables
-
-Create a `.env` file and add:
-
-```env
+env
+Copy code
 SECRET_KEY=your-secret-key
 DEBUG=True
 DATABASE_NAME=db.sqlite3   # For development
-```
+Optional for Production (PostgreSQL on Render):
 
-**Optional for Production (PostgreSQL on Render):**
-
-```env
+env
+Copy code
 DB_NAME=your_db_name
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=your_db_host
 DB_PORT=your_db_port
-```
-
-### 5️⃣ Run Migrations
-
-```bash
+5️⃣ Run Migrations
+bash
+Copy code
 python manage.py makemigrations
 python manage.py migrate
-```
-
-### 6️⃣ Start the Development Server
-
-```bash
+6️⃣ Start the Development Server
+bash
+Copy code
 python manage.py runserver
-```
+🔑 Authentication
+This project uses Basic Authentication.
 
----
+Use your username and password to access protected endpoints.
 
-## 🔑 Authentication
+You can authenticate using Postman or any REST client by selecting Basic Auth.
 
-This project uses **Basic Authentication**.
+📡 API Endpoints
+👤 User Endpoints
+Method	Endpoint	Description
+POST	/api/users/	Register a new user
+GET	/api/users/{id}/	Get user details
+PUT	/api/update/{id}/	Update user
+DELETE	/api/delete/{id}/	Delete user
 
-* Use your **username and password** to access protected endpoints.
-* You can authenticate using Postman or any REST client by selecting **Basic Auth**.
+📦 Product Endpoints
+Method	Endpoint	Description
+POST	/api/products/	Create a product
+GET	/api/products/	List all products
+GET	/api/products/{id}/	Get single product
+PUT	/api/products/{id}/	Update product
+DELETE	/api/products/{id}/	Delete product
+GET	/api/products/search/?name=xyz&category=abc	Search & filter products
 
----
+🧪 Testing the API
+Use Postman to test endpoints:
 
-## 📡 API Endpoints
+Register a user
 
-### 👤 User Endpoints
+Authenticate using Basic Auth
 
-| Method | Endpoint           | Description         |
-| ------ | ------------------ | ------------------- |
-| POST   | `/api/users/`      | Register a new user |
-| GET    | `/api/users/{id}/` | Get user details    |
-| PUT    | `/api/update/{id}/` | Update user         |
-| DELETE | `/api/delete/{id}/` | Delete user         |
+Use your credentials to access protected routes
 
-### 📦 Product Endpoints
+Optional: Import the Postman collection from /docs/postman_collection.json
 
-| Method | Endpoint                                      | Description              |
-| ------ | --------------------------------------------- | ------------------------ |
-| POST   | `/api/products/`                              | Create a product         |
-| GET    | `/api/products/`                              | List all products        |
-| GET    | `/api/products/{id}/`                         | Get single product       |
-| PUT    | `/api/products/{id}/`                         | Update product           |
-| DELETE | `/api/products/{id}/`                         | Delete product           |
-| GET    | `/api/products/search/?name=xyz&category=abc` | Search & filter products |
+🗓️ Project Timeline
+Week	Tasks
+Week 1	Setup Django project, DRF, user authentication
+Week 2	Product model & CRUD implementation
+Week 3	Search, filtering, pagination
+Week 4	Unit testing & security
+Week 5	Deployment & documentation
 
----
-
-## 🧪 Testing the API
-
-Use **Postman** to test endpoints:
-
-1. Register a user
-2. Authenticate using **Basic Auth**
-3. Use your credentials to access protected routes
-
-**Optional:** Import the Postman collection from `/docs/postman_collection.json`
-
----
-
-## 🗓️ Project Timeline
-
-| Week   | Tasks                                          |
-| ------ | ---------------------------------------------- |
-| Week 1 | Setup Django project, DRF, user authentication |
-| Week 2 | Product model & CRUD implementation            |
-| Week 3 | Search, filtering, pagination                  |
-| Week 4 | Unit testing & security                        |
-| Week 5 | Deployment & documentation                     |
-
----
-
-## 🚀 Deployment
-
+🚀 Deployment
 You can deploy this project on:
 
-* **Render** (recommended)
-* **Heroku**
-* **PythonAnywhere**
+Render (recommended)
 
-**Deployment Steps on Render:**
+Heroku
 
-1. Configure **PostgreSQL**
-2. Add environment variables in Render dashboard
-3. Push code to GitHub
-4. Connect Render to GitHub repo
-5. Set build & start commands:
+PythonAnywhere
 
-```bash
+Deployment Steps on Render:
+
+Configure PostgreSQL
+
+Add environment variables in Render dashboard
+
+Push code to GitHub
+
+Connect Render to GitHub repo
+
+Set build & start commands:
+
+bash
+Copy code
 pip install -r requirements.txt
 python manage.py collectstatic --noinput
 gunicorn ecommerce_api.wsgi
-```
+Deploy → Live URL ready
 
-6. Deploy → Live URL ready
+📄 API Documentation
+Interactive documentation available using Swagger / Redoc (via drf-yasg):
 
----
+Swagger UI: /swagger/
 
-## 📄 API Documentation
-
-Interactive documentation available using **Swagger / Redoc** (via `drf-yasg`):
-
-* Swagger UI: `/swagger/`
-* Redoc UI: `/redoc/`
-
-
+Redoc UI: /redoc/
