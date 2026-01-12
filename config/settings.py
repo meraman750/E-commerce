@@ -31,6 +31,9 @@ INSTALLED_APPS = [
     'commerce',
     'django_filters',      # for filtering products
     'drf_yasg',            # Swagger / Redoc docs
+
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 # ------------------------------
@@ -113,9 +116,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'      # for Render
 STATICFILES_DIRS = [BASE_DIR / 'static']    # local static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
 # ------------------------------
 # Default primary key field
 # ------------------------------
@@ -126,6 +126,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ------------------------------
 AUTH_USER_MODEL = 'commerce.CustomUser'
 
-# ------------------------------
-# REST Framework (Basic Auth)
-# ------------------------------
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Optional Cloudinary config if you want to customize folder names, etc.
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
