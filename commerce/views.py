@@ -9,6 +9,9 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 
 
+def home(request):
+    return redirect("dashboard")
+
 class Regsiter(View):
     def get(self, request):
         form = RegisterForm()
