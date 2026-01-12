@@ -294,7 +294,6 @@ class ViewOrderItems(LoginRequiredMixin, View):
 
 class CancelOrder(LoginRequiredMixin, View):
     def post(self, request, order_id):
-        # First, redirect to confirmation page if not confirmed
         order = get_object_or_404(Order, id=order_id, user=request.user)
         return render(request, "cancel_order_confirm.html", {"order": order})
 

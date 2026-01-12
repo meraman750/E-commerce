@@ -1,0 +1,107 @@
+/* Modern Form Container */
+.form-container {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 35px 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+}
+
+/* Form Title */
+.form-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    margin-bottom: 30px;
+}
+
+/* Product Form Layout */
+.product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Form Inputs */
+.product-form input[type="text"],
+.product-form input[type="number"],
+.product-form input[type="file"],
+.product-form select,
+.product-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    outline: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+/* Focus Effects */
+.product-form input:focus,
+.product-form select:focus,
+.product-form textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+    background: #ffffff;
+}
+
+/* Placeholder Text */
+.product-form ::placeholder {
+    color: #aaa;
+    font-weight: 400;
+}
+
+/* Submit Button */
+.btn-submit {
+    background: linear-gradient(135deg, #2563eb, #1e4bb8);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+}
+
+/* Error / Help Text */
+.product-form small,
+.product-form .errorlist {
+    color: #ff4d4f;
+    font-weight: 500;
+    margin-top: -10px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .form-container {
+        margin: 30px 15px;
+        padding: 25px 20px;
+    }
+
+    .form-title {
+        font-size: 26px;
+    }
+
+    .btn-submit {
+        font-size: 14px;
+        padding: 12px 18px;
+    }
+}

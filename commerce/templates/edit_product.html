@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <form action="" method="POST" enctype="multipart/form-data">
-      {% csrf_token %} 
-      {{ form.as_p }}
-      <button type="submit">Update product</button>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update Product{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/edit_product.css' %}">
+
+<div class="form-container">
+    <h2 class="form-title">Update Product</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="product-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-submit">Update Product</button>
     </form>
-  </body>
-</html>
+</div>
+{% endblock %}
