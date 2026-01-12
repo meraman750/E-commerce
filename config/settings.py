@@ -74,10 +74,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ------------------------------
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}",  # fallback for local
-        conn_max_age=600,
+        default=f"postgres://{config('DB_USER')}:{config('DB_PASSWORD')}@{config('DB_HOST')}:{config('DB_PORT')}/{config('DB_NAME')}"
     )
 }
+
 
 # ------------------------------
 # Password validation
