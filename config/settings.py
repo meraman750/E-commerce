@@ -28,12 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'commerce',
-    'django_filters',      # for filtering products
-    'drf_yasg',            # Swagger / Redoc docs
-
     'cloudinary',
     'cloudinary_storage',
+
+    'commerce',
+    'django_filters',
+    'drf_yasg',
 ]
 
 # ------------------------------
@@ -129,8 +129,3 @@ AUTH_USER_MODEL = 'commerce.CustomUser'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Optional Cloudinary config if you want to customize folder names, etc.
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
-}
