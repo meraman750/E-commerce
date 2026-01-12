@@ -1,9 +1,3 @@
-Ah! Got it — you’re using **Basic Authentication** (username & password) instead of JWT. That makes things simpler. I’ll rewrite your **complete README.md** accordingly and remove all JWT references. I’ll also keep it professional, graduation-ready, and ready for deployment.
-
----
-
-# **Updated README.md for Basic Authentication**
-
 ```markdown
 # 🛒 E-commerce Product API
 
